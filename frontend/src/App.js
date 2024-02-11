@@ -16,15 +16,22 @@ import EventDetailPage, {
 import EventsPage, { loader as eventsLoader } from './pages/Events';
 import EventsRootLayout from './pages/EventsRoot';
 import HomePage from './pages/Home';
+import { action as logoutAction } from './pages/Logout';
 import NewEventPage from './pages/NewEvent';
 import NewsletterPage, { action as newsletterAction } from './pages/Newsletter';
 import RootLayout from './pages/Root';
+import {
+  checkAuthLoader,
+  tokenLoader,
+} from './util/auth';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
     errorElement: <ErrorPage />,
+    id: 'root',
+    loader: tokenLoader,
     children: [
       { index: true, element: <HomePage /> },
       {
@@ -50,6 +57,7 @@ const router = createBrowserRouter([
                 path: 'edit',
                 element: <EditEventPage />,
                 action: manipulateEventAction,
+                loader: checkAuthLoader,
               },
             ],
           },
@@ -57,6 +65,7 @@ const router = createBrowserRouter([
             path: 'new',
             element: <NewEventPage />,
             action: manipulateEventAction,
+            loader: checkAuthLoader,
           },
         ],
       },
@@ -70,6 +79,10 @@ const router = createBrowserRouter([
         element: <NewsletterPage />,
         action: newsletterAction,
       },
+      {
+        path: 'logout',
+        action: logoutAction,
+      }
     ],
   },
 ]);
